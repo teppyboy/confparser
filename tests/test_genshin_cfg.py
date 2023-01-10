@@ -17,7 +17,7 @@ default_gi_str = """
 channel = 1
 cps = mihoyo
 game_version = 3.3.0
-sdk_version = 
+sdk_version =
 sub_channel = 0
 """.strip()
 
@@ -26,7 +26,7 @@ gi_modified_str = """
 channel = 1
 cps = mihoyo
 game_version = 6.2.0
-sdk_version = 
+sdk_version =
 sub_channel = 0
 best_waifu = Lumine
 """.strip()

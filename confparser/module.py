@@ -72,7 +72,7 @@ def dumps(conf: dict, preserve_comments: bool = True) -> str:
             string += f"[{key}]\n{dumps(conf=value, preserve_comments=preserve_comments)}"
             continue
         if isinstance(value, str):
-            string += f"{key} = {value}\n"
+            string += f"{key} = {value}".strip() + "\n"
             continue
         if value is None and key != "":
             string += f"{key}\n"
