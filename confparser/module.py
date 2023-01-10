@@ -9,8 +9,11 @@ def load(file: PathLike, preserve_comments: bool = True) -> dict:
 def loads(conf: str, preserve_comments: bool = True) -> dict:
     parsed: dict = {}
     lines: list[str] = conf.splitlines()
+    ignore: list[int] = []
     current: dict = parsed
     for index, line in enumerate(lines):
+        if index in ignore:
+            continue
         line = line.strip()
         if line == "":
             if preserve_comments:
