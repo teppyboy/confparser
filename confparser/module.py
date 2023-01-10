@@ -38,7 +38,7 @@ def loads(conf: str, preserve_comments: bool = True) -> dict:
         try:
             var, val = line_split
         except ValueError as e:
-            parsed["__PARSE_FAILURE__" + str(index)] = e
+            current["__PARSE_FAILURE__" + str(index)] = e
             pass
         current[var.strip()] = val.strip()
     return parsed
