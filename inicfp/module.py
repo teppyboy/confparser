@@ -46,8 +46,8 @@ def loads(
             cur = {}
             section_name = line[1:-1].strip()
             if "." not in line:
-                parsed[section_name] = cur
                 current = cur
+                parsed[section_name] = current
                 continue
             # Subsection
             trees = section_name.split(".")
@@ -62,7 +62,7 @@ def loads(
                 if not cur_parent.get(parent):
                     cur_parent[parent] = {}
                 cur_parent = cur_parent[parent]
-            cur_parent = current
+            current = cur_parent
             continue
         # Keys
         line_split = []
