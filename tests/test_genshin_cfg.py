@@ -1,16 +1,16 @@
 from pathlib import Path
 
-import confparser
+import inicfp
 
 default_gi = {
-    'General': {
-        'channel': '1',
-        'cps': 'mihoyo', 
-        'game_version': '3.3.0', 
-        'sdk_version': '', 
-        'sub_channel': '0'
-        }
+    "General": {
+        "channel": "1",
+        "cps": "mihoyo",
+        "game_version": "3.3.0",
+        "sdk_version": "",
+        "sub_channel": "0",
     }
+}
 
 default_gi_str = """
 [General]
@@ -31,46 +31,71 @@ sub_channel = 0
 best_waifu = Lumine
 """.strip()
 
+
 def parse_ok(ini: dict) -> bool:
     for v in ini.keys():
-        if v.startswith("__PARSE_FAILURE__"):
+        if v.startswith("__PARSE_FAILURE"):
             return False
     return True
 
+
 def test_load():
-    ini = confparser.load("./tests/conf/genshin-config.ini", preserve_comments=False)
+    ini = inicfp.load(
+        Path("./tests/conf/genshin-config.ini").open(), comments=False, whitespace=False
+    )
     assert ini == default_gi
+
 
 def test_loads():
-    ini = confparser.loads(Path("./tests/conf/genshin-config.ini").read_text(), preserve_comments=False)
+    ini = inicfp.loads(
+        Path("./tests/conf/genshin-config.ini").read_text(),
+        comments=False,
+        whitespace=False,
+    )
     assert ini == default_gi
 
+
 def test_load_preserve():
-    ini = confparser.load("./tests/conf/genshin-config.ini")
+    ini = inicfp.load(Path("./tests/conf/genshin-config.ini").open())
     assert parse_ok(ini)
+
 
 def test_loads_preserve():
-    ini = confparser.loads(Path("./tests/conf/genshin-config.ini").read_text())
+    ini = inicfp.loads(Path("./tests/conf/genshin-config.ini").read_text())
     assert parse_ok(ini)
 
+
 def test_dumps():
-    dumped = confparser.dumps(default_gi, preserve_comments=False)
+    dumped = inicfp.dumps(default_gi, comments=False, whitespace=False)
     assert dumped.strip() == default_gi_str
+
 
 def test_loads_dumps():
-    ini = confparser.loads(Path("./tests/conf/genshin-config.ini").read_text(), preserve_comments=False)
-    dumped = confparser.dumps(ini, preserve_comments=False)
+    ini = inicfp.loads(
+        Path("./tests/conf/genshin-config.ini").read_text(),
+        comments=False,
+        whitespace=False,
+    )
+    dumped = inicfp.dumps(ini, comments=False)
     assert dumped.strip() == default_gi_str
+
 
 def test_loads_preserve_dumps():
-    ini = confparser.loads(Path("./tests/conf/genshin-config.ini").read_text(), preserve_comments=True)
-    dumped = confparser.dumps(ini, preserve_comments=False)
+    ini = inicfp.loads(
+        Path("./tests/conf/genshin-config.ini").read_text(), comments=True
+    )
+    dumped = inicfp.dumps(ini, comments=False)
     assert dumped.strip() == default_gi_str
 
+
 def test_loads_edit_dumps():
-    ini = confparser.loads(Path("./tests/conf/genshin-config.ini").read_text(), preserve_comments=False)
+    ini = inicfp.loads(
+        Path("./tests/conf/genshin-config.ini").read_text(),
+        comments=False,
+        whitespace=False,
+    )
     # Random number dude
     ini["General"]["game_version"] = "6.2.0"
     ini["General"]["best_waifu"] = "Lumine"
-    dumped = confparser.dumps(ini, preserve_comments=False)
+    dumped = inicfp.dumps(ini, comments=False)
     assert dumped.strip() == gi_modified_str

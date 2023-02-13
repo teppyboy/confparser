@@ -1,24 +1,18 @@
 from pathlib import Path
 
-import confparser
+import inicfp
 
 default_pacman = {
-    'options': {
-        'HoldPkg': 'pacman glibc', 
-        'Architecture': 'auto', 
-        'CheckSpace': None, 
-        'SigLevel': 'Required DatabaseOptional', 
-        'LocalFileSigLevel': 'Optional'
-    }, 
-    'core': {
-        'Include': '/etc/pacman.d/mirrorlist'
-    }, 
-    'extra': {
-        'Include': '/etc/pacman.d/mirrorlist'
-    }, 
-    'community': {
-        'Include': '/etc/pacman.d/mirrorlist'
-    }
+    "options": {
+        "HoldPkg": "pacman glibc",
+        "Architecture": "auto",
+        "CheckSpace": None,
+        "SigLevel": "Required DatabaseOptional",
+        "LocalFileSigLevel": "Optional",
+    },
+    "core": {"Include": "/etc/pacman.d/mirrorlist"},
+    "extra": {"Include": "/etc/pacman.d/mirrorlist"},
+    "community": {"Include": "/etc/pacman.d/mirrorlist"},
 }
 
 default_pacman_str = """
@@ -53,46 +47,61 @@ Include = /etc/pacman.d/mirrorlist
 Include = /etc/pacman.d/mirrorlist
 """.strip()
 
+
 def parse_ok(ini: dict) -> bool:
     for v in ini.keys():
-        if v.startswith("__PARSE_FAILURE__"):
+        if v.startswith("__PARSE_FAILURE"):
             return False
     return True
 
+
 def test_load():
-    ini = confparser.load("./tests/conf/pacman.conf", preserve_comments=False)
+    ini = inicfp.load(
+        Path("./tests/conf/pacman.conf").open(), comments=False, whitespace=False
+    )
     assert ini == default_pacman
+
 
 def test_loads():
-    ini = confparser.loads(Path("./tests/conf/pacman.conf").read_text(), preserve_comments=False)
+    ini = inicfp.loads(
+        Path("./tests/conf/pacman.conf").read_text(), comments=False, whitespace=False
+    )
     assert ini == default_pacman
 
+
 def test_load_preserve():
-    ini = confparser.load("./tests/conf/pacman.conf")
+    ini = inicfp.load(Path("./tests/conf/pacman.conf").open())
     assert parse_ok(ini)
+
 
 def test_loads_preserve():
-    ini = confparser.loads(Path("./tests/conf/pacman.conf").read_text())
+    ini = inicfp.loads(Path("./tests/conf/pacman.conf").read_text())
     assert parse_ok(ini)
 
+
 def test_dumps():
-    dumped = confparser.dumps(default_pacman, preserve_comments=False)
+    dumped = inicfp.dumps(default_pacman, comments=False, whitespace=False)
     assert dumped.strip() == default_pacman_str
+
 
 def test_loads_dumps():
-    ini = confparser.loads(Path("./tests/conf/pacman.conf").read_text(), preserve_comments=False)
-    dumped = confparser.dumps(ini, preserve_comments=False)
+    ini = inicfp.loads(
+        Path("./tests/conf/pacman.conf").read_text(), comments=False, whitespace=False
+    )
+    dumped = inicfp.dumps(ini, comments=False)
     assert dumped.strip() == default_pacman_str
+
 
 def test_loads_preserve_dumps():
-    ini = confparser.loads(Path("./tests/conf/pacman.conf").read_text(), preserve_comments=True)
-    dumped = confparser.dumps(ini, preserve_comments=False)
+    ini = inicfp.loads(Path("./tests/conf/pacman.conf").read_text(), comments=True)
+    dumped = inicfp.dumps(ini, comments=False, whitespace=False)
     assert dumped.strip() == default_pacman_str
 
+
 def test_loads_edit_dumps():
-    ini = confparser.loads(Path("./tests/conf/pacman.conf").read_text(), preserve_comments=False)
-    ini["multilib"] = {
-        "Include": "/etc/pacman.d/mirrorlist"
-    }
-    dumped = confparser.dumps(ini, preserve_comments=False)
+    ini = inicfp.loads(
+        Path("./tests/conf/pacman.conf").read_text(), comments=False, whitespace=False
+    )
+    ini["multilib"] = {"Include": "/etc/pacman.d/mirrorlist"}
+    dumped = inicfp.dumps(ini, comments=False)
     assert dumped.strip() == pacman_multlib_str
