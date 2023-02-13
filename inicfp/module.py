@@ -3,13 +3,13 @@ from ast import literal_eval
 
 
 def load(
-    fp: IOBase, comments: bool = True, whitespace: bool = True, errors="ignore"
+    fp: IOBase, comments: bool = False, whitespace: bool = False, errors="ignore"
 ) -> dict:
     return loads(fp.read(), comments=comments, whitespace=whitespace, errors=errors)
 
 
 def loads(
-    conf: str, comments: bool = True, whitespace: bool = True, errors="ignore"
+    conf: str, comments: bool = False, whitespace: bool = False, errors="ignore"
 ) -> dict:
     parsed: dict = {}
     lines: list[str] = conf.splitlines()

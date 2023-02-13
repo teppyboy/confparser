@@ -4,11 +4,11 @@ import inicfp
 
 default_gi = {
     "General": {
-        "channel": "1",
+        "channel": 1,
         "cps": "mihoyo",
         "game_version": "3.3.0",
         "sdk_version": "",
-        "sub_channel": "0",
+        "sub_channel": 0,
     }
 }
 
