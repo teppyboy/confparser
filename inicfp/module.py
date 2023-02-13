@@ -1,6 +1,8 @@
 from io import IOBase
 from ast import literal_eval
 
+__all__ = ["load", "loads", "dump", "dumps"]
+
 
 def load(
     fp: IOBase, comments: bool = False, whitespace: bool = False, errors="ignore"
@@ -63,6 +65,7 @@ def loads(
             cur_parent = current
             continue
         # Keys
+        line_split = []
         for spliter in ["=", ":", " "]:
             line_split = line.split(spliter, 1)
             if len(line_split) == 1:
@@ -95,9 +98,9 @@ def loads(
                 cur_idx = index + 1
                 while not cur_line.endswith(quote):
                     if cur_idx >= len(lines):
-                        column = line.find(quote)
+                        col = line.find(quote)
                         raise ValueError(
-                            f"Unterminated string starting at: line {index + 1} column {column + 1} (char {column})"
+                            f"Unterminated string starting at: line {index + 1} column {col + 1} (char {col})"
                         )
                     val += cur_line + "\n"
                     cur_line = lines[cur_idx]
@@ -112,7 +115,7 @@ def loads(
             raise
         try:
             val = literal_eval(val)
-        except:
+        except Exception:
             pass
         current[var.strip()] = val
         if indicator:
@@ -139,7 +142,7 @@ def dumps(
     comments: bool = True,
     whitespace: bool = True,
     comment_type: str = "conf",
-    parent: str = None,
+    parent: str = "",
 ) -> str:
     if not parent:
         parent = ""
@@ -156,7 +159,7 @@ def dumps(
             continue
         if key.startswith("__WHITESPACE_"):
             if whitespace:
-                string += f"\n"
+                string += "\n"
             continue
         if key.startswith("__INI_COMMENT_"):
             if comments:
@@ -176,7 +179,14 @@ def dumps(
             continue
         if isinstance(value, dict):
             # No need last \n as dumps did for us already
-            string += f"[{parent + key}]\n{dumps(obj=value, comments=comments, whitespace=whitespace, comment_type=comment_type, parent=parent + key)}"
+            val = dumps(
+                obj=value,
+                comments=comments,
+                whitespace=whitespace,
+                comment_type=comment_type,
+                parent=parent + key,
+            )
+            string += f"[{parent + key}]\n{val}"
             continue
         if value is None and key != "":
             string += f"{key}\n"

@@ -23,18 +23,18 @@ def _remove(obj, remove: list[str]) -> dict:
 
 
 def remove_comments(obj) -> dict:
-    _remove(obj, remove=["__COMMENT_", "__COMMENT_INI_"])
+    return _remove(obj, remove=["__COMMENT_", "__COMMENT_INI_"])
 
 
 def remove_whitespace(obj) -> dict:
-    _remove(obj, remove=["__WHITESPACE_"])
+    return _remove(obj, remove=["__WHITESPACE_"])
 
 
 def remove_parse_errors(obj) -> dict:
-    _remove(obj, remove=["__PARSE_ERROR_"])
+    return _remove(obj, remove=["__PARSE_ERROR_"])
 
 
 def remove_all(obj) -> dict:
-    _remove(
+    return _remove(
         obj, remove=["__COMMENT_", "__COMMENT_INI_", "__WHITESPACE_", "__PARSE_ERROR_"]
     )
