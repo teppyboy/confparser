@@ -11,6 +11,7 @@ This implements `.ini` as described in [Wikipedia](https://en.wikipedia.org/wiki
 + Inline comments
 + Quoted values
 + Multi-line values (supported when using quoted values)
++ Hierarchy (section nesting) & relative nesting
 
 ## Usage
 

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "inicfp"
-version = "0.2.0"
+version = "0.2.1"
 description = "Very simple .ini-like file parser"
 authors = ["tretrauit <tretrauit@gmail.com>"]
 license = "MIT License"

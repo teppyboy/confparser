@@ -41,8 +41,26 @@ def loads(
             continue
         # Section
         if line.startswith("[") and line.endswith("]"):
-            current = {}
-            parsed[line[1:-1].strip()] = current
+            cur = {}
+            section_name = line[1:-1].strip()
+            if "." not in line:
+                parsed[section_name] = cur
+                current = cur
+                continue
+            # Subsection
+            trees = section_name.split(".")
+            # Relative
+            if section_name.startswith("."):
+                cur_parent = current
+            else:
+                cur_parent = parsed
+            for parent in trees:
+                if parent == "":
+                    continue
+                if not cur_parent.get(parent):
+                    cur_parent[parent] = {}
+                cur_parent = cur_parent[parent]
+            cur_parent = current
             continue
         # Keys
         for spliter in ["=", ":", " "]:
@@ -121,7 +139,12 @@ def dumps(
     comments: bool = True,
     whitespace: bool = True,
     comment_type: str = "conf",
+    parent: str = None,
 ) -> str:
+    if not parent:
+        parent = ""
+    else:
+        parent += "."
     string = ""
     for key, value in obj.items():
         if key.startswith("__PARSE_ERROR_"):
@@ -153,7 +176,7 @@ def dumps(
             continue
         if isinstance(value, dict):
             # No need last \n as dumps did for us already
-            string += f"[{key}]\n{dumps(obj=value, comments=comments, whitespace=whitespace, comment_type=comment_type)}"
+            string += f"[{parent + key}]\n{dumps(obj=value, comments=comments, whitespace=whitespace, comment_type=comment_type, parent=parent + key)}"
             continue
         if value is None and key != "":
             string += f"{key}\n"
