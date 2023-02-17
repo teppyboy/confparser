@@ -82,10 +82,12 @@ def loads(
             try:
                 if " #" in val:
                     val, comment = val.split(" #", 1)
-                    indicator = "__INLINE_COMMENT_" + str(index)
+                    if comments:
+                        indicator = "__INLINE_COMMENT_" + str(index)
                 elif " ;" in val:
                     val, comment = val.split(" ;", 1)
-                    indicator = "__INLINE_INI_COMMENT_" + str(index)
+                    if comments:
+                        indicator = "__INLINE_INI_COMMENT_" + str(index)
             except ValueError:
                 pass
             val = val.strip()
