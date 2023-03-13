@@ -95,6 +95,9 @@ def loads(
             for quote in ['"', "'"]:
                 if not val.startswith(quote):
                     continue
+                if val.endswith(quote):
+                    val = val[1:-1]
+                    break
                 val = val[1:]
                 cur_line = ""
                 cur_idx = index + 1
