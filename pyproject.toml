@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "inicfp"
-version = "0.2.2"
+version = "0.2.3"
 description = "Very simple .ini-like file parser"
 authors = ["tretrauit <tretrauit@gmail.com>"]
 license = "MIT License"
@@ -16,7 +16,7 @@ pytest = "^7.2.0"
 [tool.ruff]
 # Enable Pyflakes `E` and `F` codes by default.
 select = ["E", "F"]
-ignore = []
+ignore = ["F408", "E501"]
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = ["A", "B", "C", "D", "E", "F"]
