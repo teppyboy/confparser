@@ -1,9 +1,9 @@
 [tool.poetry]
 name = "inicfp"
-version = "0.2.3"
-description = "Very simple .ini-like file parser"
+version = "0.2.4"
+description = "Very simple .ini-like text parser"
 authors = ["tretrauit <tretrauit@gmail.com>"]
-license = "MIT License"
+license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
