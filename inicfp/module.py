@@ -76,6 +76,7 @@ def loads(
             current[line_split[0].strip()] = None
             continue
         indicator, comment = None, None
+        no_eval = False
         try:
             var, val = line_split
             # Inline comments
@@ -95,6 +96,7 @@ def loads(
             for quote in ['"', "'"]:
                 if not val.startswith(quote):
                     continue
+                no_eval = True
                 if val.endswith(quote):
                     break
                 val = val[1:]
@@ -110,17 +112,18 @@ def loads(
                     cur_line = lines[cur_idx]
                     ignore.add(cur_idx)
                     cur_idx += 1
-                val += cur_line[:-1]
+                val += cur_line.strip()[:-1]
                 break
         except ValueError as e:
             if errors == "ignore":
                 current["__PARSE_ERROR_" + str(index)] = e
                 continue
             raise
-        try:
-            val = literal_eval(val)
-        except Exception:
-            pass
+        if not no_eval:
+            try:
+                val = literal_eval(val)
+            except Exception:
+                pass
         current[var.strip()] = val
         if indicator:
             current[indicator] = comment
